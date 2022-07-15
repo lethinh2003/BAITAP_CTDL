@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #define MAX_SIZE 10;
 using namespace std;
 class SINHVIEN;
@@ -46,6 +47,7 @@ public:
 	void addMonHoc(MONHOC lecture);
 	void display();
 	void suaHoTen(string hoTen);
+	int getNamSinh();
 	float diemTrungBinh();
 	bool datDieuKienHocBong();
 
@@ -65,6 +67,15 @@ void SINHVIEN::add(string maSinhVien, string hoTen, string ngaySinh) {
 	_sMaSinhVien = maSinhVien;
 	_sHoTen = hoTen;
 	_sNgaySinh = ngaySinh;
+
+}
+int SINHVIEN::getNamSinh() {
+	string namSinh = _sNgaySinh.substr(6);
+	stringstream sss;
+	sss << namSinh;
+	int result;
+	sss >> result;
+	return result;
 
 }
 bool SINHVIEN::datDieuKienHocBong() {
@@ -129,6 +140,7 @@ public:
 	void suaHoTen(int pos ,string hoTen);
 	void insertionSort();
 	void selectionSort();
+	void quickSort(int left, int right);
 	void removeAt(int x);
 	void danhSachHocBong();
 };
@@ -227,6 +239,31 @@ void LOPSINHVIEN::selectionSort() {
 	}
 
 }
+void LOPSINHVIEN::quickSort(int left, int right) {
+	if (left >= right) {
+		return;
+	}
+	int i = left;
+	int j = right;
+	SINHVIEN x = _sinhVien[(left + right) / 2];
+	while (i < j) {
+		while (_sinhVien[i].getNamSinh() < x.getNamSinh()) {
+			i++;
+		}
+		while (_sinhVien[j].getNamSinh() > x.getNamSinh()) {
+			j--;
+		}
+		if (i <= j) {
+			swap(_sinhVien[i], _sinhVien[j]);
+			i++;
+			j--;
+		}
+	}
+	quickSort(left, j);
+	quickSort(i, right);
+
+
+}
 void LOPSINHVIEN::removeAt(int x) {
 	if (x != -1) {
 		for (int i = x + 1; i < _iSiSoSinhVien; i++) {
@@ -255,7 +292,7 @@ int main() {
 	SINHVIEN TEO(2);
 	MONHOC OOP2("2121COMP1017", "Lap trinh huong doi tuong", 3, 6);
 	MONHOC LTNC2("2121COMP1013", "Lap trinh nang cao", 3, 7);
-	TEO.add("47.01.104.203", "Le Van Teo", "23/01/2003");
+	TEO.add("47.01.104.203", "Le Van Teo", "23/01/2001");
 	TEO.addMonHoc(OOP2);
 	TEO.addMonHoc(LTNC2);
 	LOPCNTTCK47.add(TEO);
@@ -284,8 +321,15 @@ int main() {
 	cout << "LIST AFTTER SELECTION SORT" << endl;
 	LOPCNTTCK47.display();
 	cout << endl;
+	//Cau f
 	cout << "LIST DAT HOC BONG" << endl;
 	LOPCNTTCK47.danhSachHocBong();
+	cout << endl;
+	//Cau g
+	LOPCNTTCK47.quickSort(0, 1);
+	cout << "LIST AFTTER QUICK SORT" << endl;
+	LOPCNTTCK47.display();
+	cout << endl;
 
 
 	
